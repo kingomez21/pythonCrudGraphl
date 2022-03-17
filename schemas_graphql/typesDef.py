@@ -81,14 +81,3 @@ class Login(graphene.Mutation):
         lg = {"email": login.email, 'password': login.password}
         _token = generarToken(lg)
         return Login(token=_token)
-
-class InSession(graphene.Mutation):
-    usuario = graphene.Field(UsuarioLogin)
-    class Arguments:
-        _userToken = graphene.String()
-
-    def mutate(parent, info, _userToken):
-        u = inLogin(_userToken)
-        return InSession(usuario=u)
-
-

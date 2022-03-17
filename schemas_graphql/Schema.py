@@ -2,7 +2,8 @@ import graphene
 import asyncio
 from config.db import conexion
 from models.Usuario import users
-from .typesDef import Usuario, CrearUsuario, Create_persona, FileUploadMutation, Login, InSession
+from .typesDef import Usuario, CrearUsuario, Create_persona, FileUploadMutation, Login, UsuarioLogin
+from middleware.jsonwebtoken import inLogin
 
 #MUTATIONS
 class Mutation(graphene.ObjectType):
@@ -10,12 +11,12 @@ class Mutation(graphene.ObjectType):
     filess = FileUploadMutation.Field()
     CreateUser = CrearUsuario.Field()
     LoginUsers = Login.Field()
-    InSession = InSession.Field()
 
 #QUERYS
 class Query(graphene.ObjectType):
     hello = graphene.String(name=graphene.String())
     getUsers = graphene.List(Usuario)
+    getToken = graphene.Field(UsuarioLogin, token=graphene.String())
     
     def resolve_hello(parent, info, name, **kwargs):
         try:
@@ -32,7 +33,10 @@ class Query(graphene.ObjectType):
         print(tok)
         data = conexion.execute(users.select()).fetchall()
         return data
-
+    
+    def resolve_getToken(parent, info, token):
+        data = inLogin(token)
+        return data
 
 
 
