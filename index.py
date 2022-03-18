@@ -2,7 +2,7 @@ import graphene
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from starlette_graphene3 import GraphQLApp, make_playground_handler
-from schemas_graphql.Schema import Query, Mutation, Subscription
+from schema import Query, Mutation, Subscription
 
 app = FastAPI()
 

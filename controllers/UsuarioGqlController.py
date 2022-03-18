@@ -2,7 +2,6 @@ import graphene
 from config.db import conexion
 from models.Usuario import users
 from graphene_file_upload.scalars import Upload
-from middleware.jsonwebtoken import generarToken, inLogin
 
 
 #TYPES
@@ -13,9 +12,7 @@ class Usuario(graphene.ObjectType):
     fecha_nacimiento = graphene.Date()
 
 
-class UsuarioLogin(graphene.ObjectType):
-    email = graphene.String()
-    password = graphene.String()
+
 
 
 #INPUTS TYPE
@@ -30,9 +27,7 @@ class UserInput(graphene.InputObjectType):
     nombres = graphene.String()
     
 
-class LoginInput(graphene.InputObjectType):
-    email = graphene.String(required=True)
-    password = graphene.String(required=True)
+
 
 
 
@@ -72,12 +67,31 @@ class CrearUsuario(graphene.Mutation):
         return CrearUsuario(mensaje="guardado exitosamente")
 
 
-class Login(graphene.Mutation):
-    token = graphene.String()
-    class Arguments:
-         login = LoginInput()
+#MUTATIONS
+class UsuarioMutation(graphene.ObjectType):
+    CrearPersona = Create_persona.Field()
+    filess = FileUploadMutation.Field()
+    CreateUser = CrearUsuario.Field()
+   
 
-    def mutate(parent, info, login=None):
-        lg = {"email": login.email, 'password': login.password}
-        _token = generarToken(lg)
-        return Login(token=_token)
+#QUERYS
+class UsuarioQuery(graphene.ObjectType):
+    hello = graphene.String(name=graphene.String())
+    getUsers = graphene.List(Usuario)
+    
+    
+    def resolve_hello(parent, info, name, **kwargs):
+        try:
+            token = info.context.headers['aut']
+            if token:
+                return "hola desde fastApi "+name
+            else:
+                return "credenciales no validas"
+        except:
+            print("error")
+
+    def resolve_getUsers(parent, info):
+        tok = info.context.headers['aut']
+        print(tok)
+        data = conexion.execute(users.select()).fetchall()
+        return data
