@@ -1,4 +1,5 @@
-import graphene
+from fastapi import File, UploadFile
+import graphene 
 from config.db import conexion
 from models.Usuario import users
 from graphene_file_upload.scalars import Upload
@@ -9,7 +10,7 @@ class Usuario(graphene.ObjectType):
     id = graphene.Int()
     identificacion = graphene.Int()
     nombres = graphene.String()
-    fecha_nacimiento = graphene.Date()
+    fecha_nacimiento = graphene.DateTime()
 
 
 
@@ -25,11 +26,8 @@ class UserInput(graphene.InputObjectType):
     id = graphene.Int()
     identificacion = graphene.Int()
     nombres = graphene.String()
+    fechaNacimiento = graphene.Date()
     
-
-
-
-
 
 #MUTATE
 class Create_persona(graphene.Mutation):
@@ -51,7 +49,10 @@ class FileUploadMutation(graphene.Mutation):
     ok = graphene.Boolean()
 
     def mutate(self, info, file, **kwargs):
-        print(file)
+        print(type(file))
+        print(file.value)
+        fil: bytes = File(file.value)
+        print(fil.title)
         return FileUploadMutation(ok=True)
 
 
@@ -62,7 +63,7 @@ class CrearUsuario(graphene.Mutation):
     mensaje = graphene.String()
 
     def mutate(parent, info, user=None):
-        data = {'identificacion': user.identificacion, 'nombres': user.nombres}
+        data = {'identificacion': user.identificacion, 'nombres': user.nombres, 'fecha_nacimiento': user.fechaNacimiento}
         conexion.execute(users.insert().values(data))
         return CrearUsuario(mensaje="guardado exitosamente")
 
@@ -91,7 +92,5 @@ class UsuarioQuery(graphene.ObjectType):
             print("error")
 
     def resolve_getUsers(parent, info):
-        tok = info.context.headers['aut']
-        print(tok)
         data = conexion.execute(users.select()).fetchall()
         return data
