@@ -39,3 +39,12 @@ def prueba(req: Request):
         'data': "hola desde jinja2"
     }
     return templates.TemplateResponse('index.html', ctx)
+
+
+@app.get('/perros', response_class=HTMLResponse)
+def perros(req: Request):
+    ctx = {
+        'request': req,
+        'data': "hola desde peerros"
+    }
+    return templates.TemplateResponse('perros.html', ctx)

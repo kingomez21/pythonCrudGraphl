@@ -1,0 +1,39 @@
+{
+  "name": "fastAPICrud",
+  "version": "1.0.0",
+  "description": "primer graphql con python",
+  "main": "index.js",
+  "scripts": {
+    "dev": "webpack serve",
+    "build": "webpack --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kingomez21/pythonCrudGraphl.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kingomez21/pythonCrudGraphl/issues"
+  },
+  "homepage": "https://github.com/kingomez21/pythonCrudGraphl#readme",
+  "dependencies": {
+    "core-js": "^3.21.1",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.17.6",
+    "@babel/core": "^7.17.8",
+    "@babel/preset-env": "^7.16.11",
+    "@babel/preset-react": "^7.16.7",
+    "babel-loader": "^8.2.4",
+    "clean-webpack-plugin": "^4.0.0",
+    "webpack": "^5.70.0",
+    "webpack-cli": "^4.9.2",
+    "webpack-dev-server": "^4.7.4",
+    "webpack-merge": "^5.8.0"
+  },
+  "browserslist": "> 0.25%, not dead, not ie 11"
+}
